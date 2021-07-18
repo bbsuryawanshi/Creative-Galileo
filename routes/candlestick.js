@@ -6,7 +6,6 @@ const moment = require('moment')
 // Getting all
 router.post('/daily_candle', async (req, res) => {
   try {
-    console.log('inside this');
     const {
       fromDate,
       toDate
@@ -28,13 +27,10 @@ router.post('/daily_candle', async (req, res) => {
 
     const limit = parseInt(size);
     const skip = (page-1) * size;
-    console.log('limit ===>', limit);
-    console.log('skip ===>', skip);
-    console.log('fromDate ===>', fromDate);
+
     const convertedFromDate = new Date(fromDate);
     const convertedToDate = new Date(toDate);
-    console.log('convertedFromDate ====>', convertedFromDate);
-    console.log('convertedToDate ====>', convertedToDate);
+
     const candlestickData = await Candlestick.find({
       Date: {
         $gte: convertedFromDate,
@@ -43,7 +39,6 @@ router.post('/daily_candle', async (req, res) => {
     }).limit(limit).skip(skip)
     res.json(candlestickData)
   } catch (err) {
-    console.log('error ===>', err);
     res.status(500).json({
       message:  err.message ? err.message : err
     })
@@ -58,6 +53,7 @@ router.get('/weekly/:year/:weekNo', async (req, res) => {
       year,
       weekNo
     } = req.params
+
     const startOfWeek = moment(year).add(weekNo, 'weeks').startOf('isoweek');
     const endOfWeek = moment(year).add(weekNo, 'weeks').endOf('isoweek');
 
